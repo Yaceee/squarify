@@ -1,0 +1,1 @@
+A simple script to transform an image to a square one with white borders
