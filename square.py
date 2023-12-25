@@ -1,13 +1,15 @@
-from PIL import Image
-import os
 from typing import List
+import os
+from PIL import Image
+import background
 
 ORG_IMG = "./org"
 DEST_IMG = "./dest"
 
 BORDER_RATIO = 0.05
-ASPECT_RATIO = 4/5
+ASPECT_RATIO = 1
 REDUCE_FACTOR = 2
+BACKGROUND_TYPE = background.BACKGROUND_TYPE.AVERAGE_DROPSHADOW
 
 def load_images(path: str):
     images: List[Image.Image] = []
@@ -28,7 +30,7 @@ def squarify(img: Image.Image):
     aspect_multiplicator = ASPECT_RATIO if old_size[0] < old_size[1] else 1/ASPECT_RATIO
 
     new_size = (round(max(old_size)*(1 + BORDER_RATIO)*min(aspect_multiplicator, 1)),round(max(old_size)*(1 + BORDER_RATIO)*max(aspect_multiplicator, 1)))
-    new_img = Image.new("RGB", new_size, "White")
+    new_img = background.get_background(new_size, img, BACKGROUND_TYPE)
     box = tuple((n - o) // 2 for n, o in zip(new_size, old_size))
     new_img.paste(img, box)
 
