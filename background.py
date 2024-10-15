@@ -9,6 +9,7 @@ class BACKGROUND_TYPE(Enum):
     AMBILIGHT = 5
     SYNTHWAVE = 6
     GRADIENT = 7
+    MEDIAN = 8
 
 def background_white(size: tuple, img: Image.Image):
     background = Image.new("RGB", size, "White")
@@ -21,6 +22,12 @@ def background_black(size: tuple, img: Image.Image):
 def background_average(size: tuple, img: Image.Image):
     stat = ImageStat.Stat(img)
     average = tuple([ round(m) for m in stat.mean])
+    background = Image.new("RGB", size, average)
+    return background
+
+def background_median(size: tuple, img: Image.Image):
+    stat = ImageStat.Stat(img)
+    average = tuple([ round(m) for m in stat.median])
     background = Image.new("RGB", size, average)
     return background
 
@@ -101,6 +108,8 @@ def get_background_function(type: BACKGROUND_TYPE):
             return background_synthwave
         case BACKGROUND_TYPE.GRADIENT:
             return background_gradient
+        case BACKGROUND_TYPE.MEDIAN:
+            return background_median
 
 def get_background(size: tuple, img: Image.Image, type: BACKGROUND_TYPE):
     background_function = get_background_function(type)
