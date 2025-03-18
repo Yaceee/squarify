@@ -29,8 +29,16 @@ def squarify(img: Image.Image):
 
     return new_img.reduce(config.REDUCE_FACTOR)
 
+def load_and_squarify_images(path: str):
+    images: List[Image.Image] = []
+
+    for filename in os.listdir(path):
+        if(filename != ".DS_Store"):
+            img = Image.open(f"{path}/{filename}")
+            images.append(squarify(img))
+    return images
+
 if __name__=="__main__":
-    images = load_images(config.ORG_IMG)
-    images = [squarify(img) for img in images]
+    images = load_and_squarify_images(config.ORG_IMG)
     save_images(images, config.DEST_IMG)
     
